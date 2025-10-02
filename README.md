@@ -1,5 +1,5 @@
 # Starlink MCP Server
-<img src="https://github.com/ry-ops/starlink-mcp-server/commit/873ef6c451eb91242bde794da1faae4a79e3f9d0" width="100%">
+<img src="https://github.com/ry-ops/starlink-mcp-server/blob/main/starlink-mcp-server.png" width="100%">
 A Model Context Protocol (MCP) server written in Python that provides Claude AI with access to Starlink satellite data and services.
 
 ## Features
