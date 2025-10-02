@@ -1,5 +1,5 @@
 # Starlink MCP Server
-<img src="https://github.com/ry-ops/unifi-mcp-server/blob/main/unifi-mcp-server.png" width="100%">
+<img src="https://github.com/ry-ops/starlink-mcp-server/blob/main/starlink-mcp-server.jpg" width="100%">
 A Model Context Protocol (MCP) server written in Python that provides Claude AI with access to Starlink satellite data and services.
 
 ## Features
