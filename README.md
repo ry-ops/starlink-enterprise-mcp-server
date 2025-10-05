@@ -1,6 +1,12 @@
 # Starlink Enterprise MCP Server
 <img src="https://github.com/ry-ops/starlink-mcp-server/blob/main/starlink-mcp-server.png" width="100%">
 
+[![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![uv](https://img.shields.io/badge/uv-latest-green.svg)](https://github.com/astral-sh/uv)
+[![MCP](https://img.shields.io/badge/MCP-1.0-purple.svg)](https://modelcontextprotocol.io/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
 Manage your Starlink terminal fleet through Claude AI using the Starlink Enterprise API.
 
 ## Perfect For
