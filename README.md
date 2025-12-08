@@ -364,6 +364,145 @@ starlink-mcp-server/
 - Hardcode credentials in code
 - Use same credentials across environments
 
+## A2A (Agent-to-Agent) Protocol Support
+
+This MCP server supports the A2A protocol for agent-to-agent communication, enabling automated fleet management and integration with other AI agents.
+
+### Agent Card
+
+The agent capabilities are defined in `agent-card.json` at the repository root. This file describes:
+
+- **Agent Identity**: Name, description, and version
+- **Capabilities**: Streaming support, task types, async operations
+- **Skills**: All 12 available MCP tools with detailed schemas
+- **Authentication**: OAuth2 client credentials requirements
+- **Rate Limits**: API usage constraints
+- **Use Cases**: Common integration scenarios
+
+### Available Skills for Agent Communication
+
+The A2A protocol exposes these skill categories:
+
+#### Terminal Management
+- `list_user_terminals` - List all terminals with pagination
+- `get_terminal_details` - Get detailed terminal information
+- `get_account_overview` - Complete fleet overview
+
+#### Telemetry Monitoring
+- `get_terminal_telemetry` - Real-time performance data
+- `get_terminal_history` - Historical telemetry over time periods
+
+#### Service Line Management
+- `list_service_lines` - List all subscriptions
+- `get_service_line_details` - Subscription details and status
+- `list_subscription_products` - Available plans
+
+#### Data Usage Analytics
+- `get_data_usage` - Usage statistics over date ranges
+
+#### Address Management
+- `list_addresses` - All service addresses
+- `get_address_details` - Specific address information
+
+#### Availability Checking
+- `check_service_availability` - Service availability at coordinates
+
+### Integration Examples
+
+#### Agent-to-Agent Communication
+
+```json
+{
+  "task": "monitor_fleet_health",
+  "agent": "starlink-enterprise-mcp-agent",
+  "skills": ["list_user_terminals", "get_terminal_telemetry"],
+  "parameters": {
+    "page_size": 100
+  }
+}
+```
+
+#### Automated Health Checks
+
+```json
+{
+  "task": "daily_fleet_report",
+  "agent": "starlink-enterprise-mcp-agent",
+  "skills": ["get_account_overview"],
+  "schedule": "0 8 * * *"
+}
+```
+
+#### Multi-Agent Coordination
+
+```json
+{
+  "workflow": "expand_service",
+  "agents": [
+    {
+      "name": "starlink-enterprise-mcp-agent",
+      "skill": "check_service_availability",
+      "parameters": {
+        "latitude": 45.5,
+        "longitude": -93.2
+      }
+    },
+    {
+      "name": "notification-agent",
+      "skill": "send_alert",
+      "depends_on": "starlink-enterprise-mcp-agent"
+    }
+  ]
+}
+```
+
+### A2A Authentication
+
+When using A2A protocol, ensure the agent has access to:
+
+```json
+{
+  "credentials": {
+    "STARLINK_CLIENT_ID": "your_client_id",
+    "STARLINK_CLIENT_SECRET": "your_client_secret"
+  },
+  "scopes": [
+    "enterprise.read",
+    "terminals.read",
+    "telemetry.read"
+  ]
+}
+```
+
+### Rate Limiting in A2A Context
+
+When integrating with other agents, respect these rate limits:
+
+| Endpoint Type | Limit | Recommended Strategy |
+|--------------|-------|---------------------|
+| Authentication | 10/min | Cache tokens (valid 1 hour) |
+| Terminal queries | 100/min | Batch requests |
+| Telemetry | 1000/min | Use for real-time monitoring |
+| Data usage | 100/min | Schedule during off-peak |
+
+### Discovering Agent Capabilities
+
+Other agents can discover capabilities by reading `agent-card.json`:
+
+```bash
+curl https://raw.githubusercontent.com/ry-ops/starlink-enterprise-mcp-server/main/agent-card.json
+```
+
+Or through the MCP protocol's tool listing:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "tools/list",
+  "id": 1
+}
+```
+
 ## Support
 
 ### Starlink Support
@@ -375,6 +514,7 @@ starlink-mcp-server/
 - **API Docs**: https://starlink.readme.io/docs (requires access)
 - **Enterprise Guide**: https://starlink-enterprise-guide.readme.io
 - **Swagger UI**: https://web-api.starlink.com/enterprise/swagger/index.html
+- **Agent Card**: `agent-card.json` in repository root
 
 ## Contributing
 
@@ -386,4 +526,4 @@ MIT
 
 ---
 
-**Manage your Starlink fleet effortlessly with Claude AI!** 🛰️✨
+**Manage your Starlink fleet effortlessly with Claude AI and A2A protocol!** 🛰️✨🤖
