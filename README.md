@@ -1,11 +1,11 @@
 # Starlink Enterprise MCP Server
-<img src="https://github.com/ry-ops/starlink-mcp-server/blob/main/starlink-mcp-server.png" width="100%">
+<img src="starlink-mcp-server.png" width="100%">
 
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![uv](https://img.shields.io/badge/uv-latest-green.svg)](https://github.com/astral-sh/uv)
 [![MCP](https://img.shields.io/badge/MCP-1.0-purple.svg)](https://modelcontextprotocol.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/ry-ops/starlink-enterprise-mcp-server/issues)
 
 Manage your Starlink terminal fleet through Claude AI using the Starlink Enterprise API.
 
@@ -54,22 +54,17 @@ Manage your Starlink terminal fleet through Claude AI using the Starlink Enterpr
 # Install uv
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Create and setup project
-mkdir starlink-mcp-server && cd starlink-mcp-server
-mkdir src
+# Get the code
+git clone https://github.com/ry-ops/starlink-enterprise-mcp-server
+cd starlink-enterprise-mcp-server
 
-# Save starlink_mcp_server.py to src/
-# Save pyproject.toml to root
-# Save .env.example to root
-
-# Install
+# Install the two dependencies
 uv venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-uv pip install -e .
+uv pip install "mcp>=1.0.0" "httpx>=0.27.0"
 
-# Configure credentials
-cp .env.example .env
-# Edit .env and add your STARLINK_CLIENT_ID and STARLINK_CLIENT_SECRET
+# Credentials are read from environment variables.
+# secrets.env lists every variable; set them in your Claude Desktop config (below).
 ```
 
 ## Getting API Access
@@ -86,7 +81,7 @@ API access is available by request to Starlink Enterprise and Business customers
 
 ### Step 2: Configure Environment
 
-Add credentials to `.env`:
+The server reads these environment variables (see `secrets.env` for the full list); set them in the `env` block of your Claude Desktop config:
 
 ```bash
 STARLINK_CLIENT_ID=your_actual_client_id_here
@@ -124,7 +119,7 @@ STARLINK_CLIENT_SECRET=your_actual_client_secret_here
         "/absolute/path/to/starlink-mcp-server",
         "run",
         "python",
-        "src/starlink_mcp_server.py"
+        "starlink-mcp-server.py"
       ],
       "env": {
         "STARLINK_CLIENT_ID": "your_client_id",
@@ -301,13 +296,12 @@ Claude, give me a morning report:
 ## Project Structure
 
 ```
-starlink-mcp-server/
-├── src/
-│   └── starlink_mcp_server.py    # Main server code
+starlink-enterprise-mcp-server/
+├── starlink-mcp-server.py         # The MCP server
+├── secrets.env                    # Template listing every environment variable
 ├── pyproject.toml                 # Dependencies
-├── .env                           # Your credentials (DO NOT COMMIT)
-├── .env.example                   # Template
-├── .gitignore                     # Git exclusions
+├── agent-card.json                # A2A agent card
+├── quick-reference.md             # Tool quick reference
 └── README.md                      # This file
 ```
 
@@ -328,7 +322,7 @@ starlink-mcp-server/
 ## Troubleshooting
 
 ### "credentials not configured"
-- Check `.env` file exists and has correct values
+- Check the `env` block in your Claude Desktop config has the correct values
 - Ensure no extra spaces in credential values
 - Verify credentials with your account manager
 
@@ -527,3 +521,8 @@ MIT
 ---
 
 **Manage your Starlink fleet effortlessly with Claude AI and A2A protocol!** 🛰️✨🤖
+
+<!-- org-footer -->
+---
+
+<p align="center"><sub>Part of <a href="https://github.com/ry-ops">ry-ops</a> · building the pipes between infrastructure, automation, and observability · built by <a href="https://github.com/ry-ops">ry-ops</a></sub></p>
