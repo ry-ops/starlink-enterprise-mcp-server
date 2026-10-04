@@ -1,126 +1,70 @@
-# Starlink Enterprise MCP Server
-<img src="starlink-mcp-server.png" width="100%">
+<p align="center">
+  <img src="docs/hero.svg" width="100%" alt="Satellites orbit over Starlink terminals on a ship, a rig, a clinic and a ranch; you ask which terminals had obstructions today, the server calls get_account_overview and get_terminal_telemetry, and the rig is flagged at 12% obstructed.">
+</p>
 
-[![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![uv](https://img.shields.io/badge/uv-latest-green.svg)](https://github.com/astral-sh/uv)
-[![MCP](https://img.shields.io/badge/MCP-1.0-purple.svg)](https://modelcontextprotocol.io/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/ry-ops/starlink-enterprise-mcp-server/issues)
+<p align="center">
+  <img src="https://img.shields.io/badge/tools-12%20read--only-3ec7ff" alt="12 read-only tools">
+  <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.10+-3ddc84" alt="Python 3.10+"></a>
+  <a href="https://modelcontextprotocol.io/"><img src="https://img.shields.io/badge/MCP-stdio-b58cff" alt="MCP"></a>
+  <img src="https://img.shields.io/badge/A2A-agent%20card-ffb02e" alt="A2A agent card">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-8b96ad" alt="MIT"></a>
+</p>
 
-Manage your Starlink terminal fleet through Claude AI using the Starlink Enterprise API.
+<p align="center"><b>Your whole Starlink terminal fleet, one conversation away.</b> An MCP server for the Starlink Enterprise API: ask Claude about terminals, signal and obstructions, service lines and data usage, addresses and coverage, in plain English.</p>
 
-## Perfect For
+---
 
-- **Enterprise customers** with multiple Starlink terminals deployed
-- **Fleet operators** needing centralized terminal management
-- **IT teams** monitoring terminal health and performance
-- **Operations managers** tracking data usage and costs
+## ✨ Ask things like
 
-## Features
+> *"Give me this morning's fleet status."*
+> *"Which terminals had obstructions today?"*
+> *"Show Rig-04's telemetry for the last 7 days."*
+> *"How much data did the North Sea vessel use in September?"*
+> *"Is Starlink available at this address before we ship a kit there?"*
+> *"Which subscription plans can we choose from?"*
 
-✅ **Terminal Management**
-- List all your user terminals
-- Get real-time telemetry (uptime, signal, obstructions)
-- View terminal details and configuration
-- Historical performance data
+It's built for teams running **many terminals**: fleet operators, IT teams watching uptime, and operations managers tracking usage.
 
-✅ **Service Line Management**
-- List all service lines (subscriptions)
-- Track data usage by date range
-- View subscription details and status
-- Monitor billing and plans
+## ⚙️ How it works
 
-✅ **Address Management**
-- List all service addresses
-- Check service availability at new locations
-- View address details
+<p align="center">
+  <img src="docs/how-it-works.svg" width="100%" alt="The server exchanges a service account's client ID and secret for an access token, caches it until it expires, and calls the Starlink Enterprise API with it; twelve read-only tools in four groups.">
+</p>
 
-✅ **Account Overview**
-- Complete fleet status at a glance
-- Summary statistics across all terminals
-- Quick health checks
+- **One file, two dependencies.** `starlink-mcp-server.py` runs over stdio with `mcp` and `httpx`.
+- **Service-account auth.** It exchanges your **client ID and secret** for an access token, caches the token, and refreshes it shortly before it expires.
+- **Read-only by design.** All 12 tools read; nothing changes your account or terminals.
 
-## Prerequisites
+| Group | Tools |
+|---|---|
+| **Terminals** (4) | `list_user_terminals`, `get_terminal_details`, `get_terminal_telemetry` (uptime, signal quality, obstructions, throughput), `get_terminal_history` |
+| **Service lines** (3) | `list_service_lines`, `get_service_line_details`, `get_data_usage` (for a date range) |
+| **Addresses** (3) | `list_addresses`, `get_address_details`, `check_service_availability` |
+| **Account** (2) | `get_account_overview` (the whole fleet at a glance), `list_subscription_products` |
 
-- Python 3.10 or higher
-- [uv](https://github.com/astral-sh/uv) package manager
-- Claude Desktop App
-- **Starlink Business/Enterprise Account** with API access
-- **Client ID and Client Secret** from your Starlink account manager
+## 🚀 Setup
 
-## Quick Start
+**1. Get API access.** The Enterprise API is available on request to Starlink Business and Enterprise customers. Ask your account manager, or email `business-support@starlink.com`. Then create a service account:
+1. Sign in at [starlink.com/account](https://www.starlink.com/account) and open **Settings**.
+2. Under **Service Accounts**, click **+ Add Service Account**.
+3. Copy the **Client ID** and **Client Secret**.
+
+**2. Get the code.** You need **Python 3.10+** and [`uv`](https://github.com/astral-sh/uv).
 
 ```bash
-# Install uv
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Get the code
 git clone https://github.com/ry-ops/starlink-enterprise-mcp-server
 cd starlink-enterprise-mcp-server
-
-# Install the two dependencies
-uv venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-uv pip install "mcp>=1.0.0" "httpx>=0.27.0"
-
-# Credentials are read from environment variables.
-# secrets.env lists every variable; set them in your Claude Desktop config (below).
+uv sync          # installs mcp and httpx
 ```
 
-## Getting API Access
-
-API access is available by request to Starlink Enterprise and Business customers. Contact your Starlink account manager or email `business-support@starlink.com` to request access.
-
-### Step 1: Create Service Account
-
-1. Log into https://www.starlink.com/account
-2. Navigate to **Settings** tab
-3. Find **"Service Accounts"** section
-4. Click **"+ Add Service Account"**
-5. Note your Client ID and Client Secret
-
-### Step 2: Configure Environment
-
-The server reads these environment variables (see `secrets.env` for the full list); set them in the `env` block of your Claude Desktop config:
-
-```bash
-STARLINK_CLIENT_ID=your_actual_client_id_here
-STARLINK_CLIENT_SECRET=your_actual_client_secret_here
-```
-
-## Connect to Claude Desktop
-
-### Configuration File Location
-
-**macOS:**
-```
-~/Library/Application Support/Claude/claude_desktop_config.json
-```
-
-**Windows:**
-```
-%APPDATA%\Claude\claude_desktop_config.json
-```
-
-**Linux:**
-```
-~/.config/Claude/claude_desktop_config.json
-```
-
-### Add Server Configuration
+**3. Connect Claude Desktop.** Add this to `claude_desktop_config.json`. On macOS it's in `~/Library/Application Support/Claude/`; on Windows, `%APPDATA%\Claude\`; on Linux, `~/.config/Claude/`.
 
 ```json
 {
   "mcpServers": {
     "starlink": {
       "command": "uv",
-      "args": [
-        "--directory",
-        "/absolute/path/to/starlink-mcp-server",
-        "run",
-        "python",
-        "starlink-mcp-server.py"
-      ],
+      "args": ["--directory", "/absolute/path/to/starlink-enterprise-mcp-server", "run", "python", "starlink-mcp-server.py"],
       "env": {
         "STARLINK_CLIENT_ID": "your_client_id",
         "STARLINK_CLIENT_SECRET": "your_client_secret"
@@ -130,397 +74,49 @@ STARLINK_CLIENT_SECRET=your_actual_client_secret_here
 }
 ```
 
-**Important:** Replace `/absolute/path/to/starlink-mcp-server` with your actual path!
+Credentials come **only from environment variables**: `STARLINK_CLIENT_ID` and `STARLINK_CLIENT_SECRET`. `secrets.env` is a template listing them; the server doesn't read it. Quit and reopen Claude Desktop, and "starlink" appears in its tools.
 
-### Restart Claude
+## 🔒 Security
 
-1. Quit Claude Desktop completely
-2. Reopen Claude Desktop
-3. Look for 🔌 icon - you should see "starlink" connected
+- **Keep the client secret out of git.** Put it in your MCP client's `env`, or in a secrets manager.
+- **Use a dedicated service account** for this server, so you can rotate or revoke it without touching anything else.
+- **The tools only read,** but they can see your whole fleet: terminal locations, usage and plans. Treat the credentials accordingly.
 
-## Available Tools
+## 🤝 Agent-to-agent (A2A)
 
-### list_user_terminals
-List all your Starlink terminals with status.
+[`agent-card.json`](agent-card.json) lists the server's 12 skills, one per tool, with their inputs and auth requirements, so other agents can discover and call them.
 
-**Example:**
-```
-Show me all my Starlink terminals
-```
+## 🩺 Troubleshooting
 
-### get_terminal_details
-Get detailed information about a specific terminal.
+<details>
+<summary><b>"credentials not configured"</b></summary>
 
-**Example:**
-```
-Get details for terminal abc-123-def-456
-```
+`STARLINK_CLIENT_ID` and `STARLINK_CLIENT_SECRET` aren't set in the server's environment. Add them to the `env` block of your MCP config.
+</details>
 
-### get_terminal_telemetry
-Get real-time performance data (uptime, signal quality, obstructions, throughput).
+<details>
+<summary><b>"Authentication failed"</b></summary>
 
-**Example:**
-```
-Show me telemetry for terminal abc-123-def-456
-```
+Check the client ID and secret, and that the service account hasn't been deleted. API access has to be enabled on your account first.
+</details>
 
-### list_service_lines
-List all your service lines (subscriptions).
+<details>
+<summary><b>Rate-limit errors (429)</b></summary>
 
-**Example:**
-```
-List all my service lines
-```
+The server doesn't retry on its own. Ask for less at once, for example one terminal's history rather than all of them, and try again shortly.
+</details>
 
-### get_service_line_details
-Get details about a specific service line.
+<details>
+<summary><b>"starlink" doesn't show up in Claude</b></summary>
 
-**Example:**
-```
-Get details for service line xyz-789
-```
+Use an absolute path in `--directory`, check the JSON is valid, and quit Claude Desktop completely before reopening it.
+</details>
 
-### get_data_usage
-Get data usage over a date range.
-
-**Example:**
-```
-Show me data usage from 2024-01-01 to 2024-01-31 for service line xyz-789
-```
-
-### list_addresses
-List all service addresses.
-
-**Example:**
-```
-Show me all my Starlink addresses
-```
-
-### get_address_details
-Get details about a specific address.
-
-**Example:**
-```
-Get details for address addr-123
-```
-
-### check_service_availability
-Check if Starlink is available at coordinates.
-
-**Example:**
-```
-Is Starlink available at latitude 45.5, longitude -93.2?
-```
-
-### get_account_overview
-Get complete overview of your fleet.
-
-**Example:**
-```
-Give me an overview of my entire Starlink account
-```
-
-### list_subscription_products
-List available Starlink plans and products.
-
-**Example:**
-```
-What subscription products are available?
-```
-
-### get_terminal_history
-Get historical data for a terminal.
-
-**Example:**
-```
-Show me history for terminal abc-123 from 2024-01-01T00:00:00Z to 2024-01-02T00:00:00Z
-```
-
-## Common Use Cases
-
-### Daily Fleet Check
-```
-Good morning! Show me all my terminals and highlight any with issues
-```
-
-### Troubleshooting
-```
-Terminal ABC123 in Denver is slow. Show me its telemetry data
-```
-
-### Usage Monitoring
-```
-Show me data usage for all service lines this month
-```
-
-### Expansion Planning
-```
-We want to add terminals at these locations: [coordinates]. Check service availability
-```
-
-### Performance Review
-```
-Show me terminals with lowest uptime over the past 30 days
-```
-
-### Cost Analysis
-```
-Which service lines had the highest data usage last month?
-```
-
-## Example Workflows
-
-### Morning Status Report
-```
-Claude, give me a morning report:
-1. List all terminals
-2. Show which ones are offline or have issues
-3. Total data usage yesterday across all service lines
-```
-
-### Terminal Troubleshooting
-```
-1. Get telemetry for terminal [id]
-2. Show 24-hour history
-3. Compare to other terminals at same location
-```
-
-### Monthly Review
-```
-1. Get account overview
-2. Data usage for January across all service lines
-3. List terminals by uptime percentage
-4. Identify any performance trends
-```
-
-## Project Structure
-
-```
-starlink-enterprise-mcp-server/
-├── starlink-mcp-server.py         # The MCP server
-├── secrets.env                    # Template listing every environment variable
-├── pyproject.toml                 # Dependencies
-├── agent-card.json                # A2A agent card
-├── quick-reference.md             # Tool quick reference
-└── README.md                      # This file
-```
-
-## API Rate Limits
-
-| Endpoint | Limit |
-|----------|-------|
-| Authentication | 10 requests/minute |
-| Terminal queries | 100 requests/minute |
-| Telemetry | 1000 requests/minute |
-| Data usage | 100 requests/minute |
-
-**Tips:**
-- Cache terminal lists (they change rarely)
-- Batch related requests
-- Implement retry logic with exponential backoff
-
-## Troubleshooting
-
-### "credentials not configured"
-- Check the `env` block in your Claude Desktop config has the correct values
-- Ensure no extra spaces in credential values
-- Verify credentials with your account manager
-
-### "Authentication failed"
-- Confirm Client ID and Client Secret are correct
-- Check that your service account is active
-- Contact account manager if credentials expired
-
-### Server won't connect to Claude
-- Verify absolute path in `claude_desktop_config.json`
-- Check Python and dependencies installed
-- Test server manually: `python src/starlink_mcp_server.py`
-- Restart Claude Desktop
-
-### Rate limit errors
-- You've exceeded API limits
-- Wait for limit reset (usually 1 minute)
-- Reduce request frequency
-- Consider caching results
-
-## Security Best Practices
-
-✅ **Do:**
-- Keep `.env` in `.gitignore`
-- Use strong, unique credentials
-- Rotate credentials periodically
-- Use environment variables, not hardcoded values
-- Separate dev/prod credentials
-
-❌ **Don't:**
-- Commit credentials to git
-- Share credentials publicly
-- Hardcode credentials in code
-- Use same credentials across environments
-
-## A2A (Agent-to-Agent) Protocol Support
-
-This MCP server supports the A2A protocol for agent-to-agent communication, enabling automated fleet management and integration with other AI agents.
-
-### Agent Card
-
-The agent capabilities are defined in `agent-card.json` at the repository root. This file describes:
-
-- **Agent Identity**: Name, description, and version
-- **Capabilities**: Streaming support, task types, async operations
-- **Skills**: All 12 available MCP tools with detailed schemas
-- **Authentication**: OAuth2 client credentials requirements
-- **Rate Limits**: API usage constraints
-- **Use Cases**: Common integration scenarios
-
-### Available Skills for Agent Communication
-
-The A2A protocol exposes these skill categories:
-
-#### Terminal Management
-- `list_user_terminals` - List all terminals with pagination
-- `get_terminal_details` - Get detailed terminal information
-- `get_account_overview` - Complete fleet overview
-
-#### Telemetry Monitoring
-- `get_terminal_telemetry` - Real-time performance data
-- `get_terminal_history` - Historical telemetry over time periods
-
-#### Service Line Management
-- `list_service_lines` - List all subscriptions
-- `get_service_line_details` - Subscription details and status
-- `list_subscription_products` - Available plans
-
-#### Data Usage Analytics
-- `get_data_usage` - Usage statistics over date ranges
-
-#### Address Management
-- `list_addresses` - All service addresses
-- `get_address_details` - Specific address information
-
-#### Availability Checking
-- `check_service_availability` - Service availability at coordinates
-
-### Integration Examples
-
-#### Agent-to-Agent Communication
-
-```json
-{
-  "task": "monitor_fleet_health",
-  "agent": "starlink-enterprise-mcp-agent",
-  "skills": ["list_user_terminals", "get_terminal_telemetry"],
-  "parameters": {
-    "page_size": 100
-  }
-}
-```
-
-#### Automated Health Checks
-
-```json
-{
-  "task": "daily_fleet_report",
-  "agent": "starlink-enterprise-mcp-agent",
-  "skills": ["get_account_overview"],
-  "schedule": "0 8 * * *"
-}
-```
-
-#### Multi-Agent Coordination
-
-```json
-{
-  "workflow": "expand_service",
-  "agents": [
-    {
-      "name": "starlink-enterprise-mcp-agent",
-      "skill": "check_service_availability",
-      "parameters": {
-        "latitude": 45.5,
-        "longitude": -93.2
-      }
-    },
-    {
-      "name": "notification-agent",
-      "skill": "send_alert",
-      "depends_on": "starlink-enterprise-mcp-agent"
-    }
-  ]
-}
-```
-
-### A2A Authentication
-
-When using A2A protocol, ensure the agent has access to:
-
-```json
-{
-  "credentials": {
-    "STARLINK_CLIENT_ID": "your_client_id",
-    "STARLINK_CLIENT_SECRET": "your_client_secret"
-  },
-  "scopes": [
-    "enterprise.read",
-    "terminals.read",
-    "telemetry.read"
-  ]
-}
-```
-
-### Rate Limiting in A2A Context
-
-When integrating with other agents, respect these rate limits:
-
-| Endpoint Type | Limit | Recommended Strategy |
-|--------------|-------|---------------------|
-| Authentication | 10/min | Cache tokens (valid 1 hour) |
-| Terminal queries | 100/min | Batch requests |
-| Telemetry | 1000/min | Use for real-time monitoring |
-| Data usage | 100/min | Schedule during off-peak |
-
-### Discovering Agent Capabilities
-
-Other agents can discover capabilities by reading `agent-card.json`:
-
-```bash
-curl https://raw.githubusercontent.com/ry-ops/starlink-enterprise-mcp-server/main/agent-card.json
-```
-
-Or through the MCP protocol's tool listing:
-
-```json
-{
-  "jsonrpc": "2.0",
-  "method": "tools/list",
-  "id": 1
-}
-```
-
-## Support
-
-### Starlink Support
-- **Email**: business-support@starlink.com
-- **Account Manager**: Contact your assigned manager
-- **Support Portal**: https://www.starlink.com/support
-
-### Documentation
-- **API Docs**: https://starlink.readme.io/docs (requires access)
-- **Enterprise Guide**: https://starlink-enterprise-guide.readme.io
-- **Swagger UI**: https://web-api.starlink.com/enterprise/swagger/index.html
-- **Agent Card**: `agent-card.json` in repository root
-
-## Contributing
-
-Found a bug or have a feature request? Please open an issue on GitHub.
+There's a one-page cheat sheet in [quick-reference.md](quick-reference.md).
 
 ## License
 
-MIT
-
----
-
-**Manage your Starlink fleet effortlessly with Claude AI and A2A protocol!** 🛰️✨🤖
+MIT. See [LICENSE](LICENSE).
 
 <!-- org-footer -->
 ---

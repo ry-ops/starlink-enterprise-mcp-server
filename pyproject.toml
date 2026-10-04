@@ -20,9 +20,6 @@ dev = [
     "ruff>=0.3.0",
 ]
 
-[project.scripts]
-starlink-mcp-server = "starlink_mcp_server:main"
-
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
@@ -37,3 +34,7 @@ target-version = "py310"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+
+[tool.uv]
+# A single-file server, not an installable package: uv just installs the dependencies.
+package = false

@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" width="960" height="420" role="img" aria-labelledby="t d">
+  <title id="t">Starlink Enterprise MCP Server: your terminal fleet in a conversation</title>
+  <desc id="d">Satellites orbit above a fleet of Starlink terminals on a ship, an oil rig, a clinic and a ranch. You ask which terminals had obstructions today; the server calls get_account_overview and get_terminal_telemetry on the Starlink Enterprise API, the rig's dish is flagged, and the answer comes back. All names and numbers are examples.</desc>
+  <defs>
+    <linearGradient id="title" x1="0" x2="1"><stop offset="0" stop-color="#e6ebf5"/><stop offset=".5" stop-color="#a8e4ff"/><stop offset="1" stop-color="#3ec7ff"/></linearGradient>
+    <radialGradient id="earth" cx="50%" cy="0%" r="80%"><stop offset="0" stop-color="#1b3a5c"/><stop offset="1" stop-color="#0f1420"/></radialGradient>
+  </defs>
+  <style>
+    text { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; fill: #e6ebf5; }
+    .muted { fill: #8b96ad; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    @keyframes ask { 0%,2.50% { opacity: 0; transform: translateY(8px); } 5.42%,95.00% { opacity: 1; transform: translateY(0); } 97.50%,100% { opacity: 0; } } .ask { animation: ask 12.0s infinite; }
+    @keyframes c1 { 0%,11.67% { opacity: 0; } 14.58%,95.00% { opacity: 1; } 97.50%,100% { opacity: 0; } } .c1 { animation: c1 12.0s infinite; }
+    @keyframes c2 { 0%,20.00% { opacity: 0; } 22.92%,95.00% { opacity: 1; } 97.50%,100% { opacity: 0; } } .c2 { animation: c2 12.0s infinite; }
+    @keyframes ans { 0%,50.00% { opacity: 0; transform: translateY(6px); } 52.92%,95.00% { opacity: 1; transform: translateY(0); } 97.50%,100% { opacity: 0; } } .ans { animation: ans 12.0s infinite; }
+    @keyframes warn { 0%,38.33% { opacity: 0; } 41.25%,95.00% { opacity: 1; } 97.50%,100% { opacity: 0; } } .warn { animation: warn 12.0s infinite; }
+    .up0 { animation: blink 2.4s 0.0s ease-in-out infinite; }
+    .up1 { animation: blink 2.4s 0.4s ease-in-out infinite; }
+    .up2 { animation: blink 2.4s 0.8s ease-in-out infinite; }
+    .up3 { animation: blink 2.4s 1.2000000000000002s ease-in-out infinite; }
+    @keyframes blink { 0%,100% { opacity: .5; } 50% { opacity: 1; } }
+    .bm0 { animation: beam 3s 0.0s linear infinite; }
+    .bm1 { animation: beam 3s 0.7s linear infinite; }
+    .bm2 { animation: beam 3s 1.4s linear infinite; }
+    .bm3 { animation: beam 3s 2.0999999999999996s linear infinite; }
+    @keyframes beam { 0% { stroke-dashoffset: 0; opacity: .2; } 50% { opacity: .9; } 100% { stroke-dashoffset: -32; opacity: .2; } }
+    .orbit { animation: orbit 14s linear infinite; }
+    .orbit2 { animation: orbit 14s -7s linear infinite; }
+    @keyframes orbit { from { transform: translateX(-420px); } to { transform: translateX(420px); } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <rect width="960" height="420" rx="20" fill="#0f1420"/>
+  <!-- stars -->
+  <g fill="#e6ebf5" opacity=".5"><circle cx="520" cy="40" r="1"/><circle cx="610" cy="80" r="1.2"/><circle cx="700" cy="30" r="0.8"/><circle cx="780" cy="70" r="1"/><circle cx="860" cy="45" r="1.3"/><circle cx="920" cy="90" r="0.9"/><circle cx="560" cy="120" r="0.8"/><circle cx="820" cy="120" r="1"/><circle cx="900" cy="140" r="0.7"/><circle cx="650" cy="140" r="1"/></g>
+  <text x="40" y="66" font-size="40" font-weight="800" style="fill:url(#title)">Starlink Enterprise MCP</text>
+  <text x="42" y="96" font-size="16" class="muted">Your whole terminal fleet, one conversation away.</text>
+
+  <!-- orbit band -->
+  <clipPath id="sky"><rect x="500" y="130" width="440" height="60"/></clipPath>
+  <g clip-path="url(#sky)">
+    <g class="orbit"><g transform="translate(720 150)"><rect x="-10" y="-3" width="20" height="6" rx="1" fill="#c9d2e3"/><rect x="-26" y="-2" width="14" height="4" fill="#3ec7ff"/><rect x="12" y="-2" width="14" height="4" fill="#3ec7ff"/></g></g><g class="orbit2"><g transform="translate(720 170)"><rect x="-10" y="-3" width="20" height="6" rx="1" fill="#c9d2e3"/><rect x="-26" y="-2" width="14" height="4" fill="#3ec7ff"/><rect x="12" y="-2" width="14" height="4" fill="#3ec7ff"/></g></g><g class="orbit"><g transform="translate(600 166)"><rect x="-10" y="-3" width="20" height="6" rx="1" fill="#c9d2e3"/><rect x="-26" y="-2" width="14" height="4" fill="#3ec7ff"/><rect x="12" y="-2" width="14" height="4" fill="#3ec7ff"/></g></g><g class="orbit2"><g transform="translate(840 148)"><rect x="-10" y="-3" width="20" height="6" rx="1" fill="#c9d2e3"/><rect x="-26" y="-2" width="14" height="4" fill="#3ec7ff"/><rect x="12" y="-2" width="14" height="4" fill="#3ec7ff"/></g></g>
+  </g>
+  <path d="M500 410 Q 720 230 940 410 Z" fill="url(#earth)" opacity=".9"/>
+  <line class="bm0" x1="600" y1="286" x2="630" y2="168" stroke="#3ec7ff" stroke-width="1.5" stroke-dasharray="3 5"/><line class="bm1" x1="700" y1="316" x2="670" y2="168" stroke="#3ec7ff" stroke-width="1.5" stroke-dasharray="3 5"/><line class="bm2" x1="800" y1="286" x2="830" y2="168" stroke="#3ec7ff" stroke-width="1.5" stroke-dasharray="3 5"/><line class="bm3" x1="890" y1="316" x2="860" y2="168" stroke="#3ec7ff" stroke-width="1.5" stroke-dasharray="3 5"/>
+  <g transform="translate(600 300)">
+      <path d="M-14 6 A16 16 0 0 1 14 -10" fill="none" stroke="#c9d2e3" stroke-width="3"/>
+      <line x1="0" y1="-2" x2="0" y2="16" stroke="#8b96ad" stroke-width="2.5"/>
+      <rect x="-8" y="16" width="16" height="4" rx="2" fill="#8b96ad"/>
+      <circle class="up0" cx="12" cy="18" r="4" fill="#3ddc84"/>
+      <text x="0" y="38" text-anchor="middle" font-size="10.5" class="muted">Vessel · North Sea</text>
+    </g><g transform="translate(700 330)">
+      <path d="M-14 6 A16 16 0 0 1 14 -10" fill="none" stroke="#c9d2e3" stroke-width="3"/>
+      <line x1="0" y1="-2" x2="0" y2="16" stroke="#8b96ad" stroke-width="2.5"/>
+      <rect x="-8" y="16" width="16" height="4" rx="2" fill="#8b96ad"/>
+      <circle class="up1" cx="12" cy="18" r="4" fill="#3ddc84"/>
+      <text x="0" y="38" text-anchor="middle" font-size="10.5" class="muted">Rig-04</text>
+    </g><g transform="translate(800 300)">
+      <path d="M-14 6 A16 16 0 0 1 14 -10" fill="none" stroke="#c9d2e3" stroke-width="3"/>
+      <line x1="0" y1="-2" x2="0" y2="16" stroke="#8b96ad" stroke-width="2.5"/>
+      <rect x="-8" y="16" width="16" height="4" rx="2" fill="#8b96ad"/>
+      <circle class="up2" cx="12" cy="18" r="4" fill="#3ddc84"/>
+      <text x="0" y="38" text-anchor="middle" font-size="10.5" class="muted">Clinic · Kenya</text>
+    </g><g transform="translate(890 330)">
+      <path d="M-14 6 A16 16 0 0 1 14 -10" fill="none" stroke="#c9d2e3" stroke-width="3"/>
+      <line x1="0" y1="-2" x2="0" y2="16" stroke="#8b96ad" stroke-width="2.5"/>
+      <rect x="-8" y="16" width="16" height="4" rx="2" fill="#8b96ad"/>
+      <circle class="up3" cx="12" cy="18" r="4" fill="#3ddc84"/>
+      <text x="0" y="38" text-anchor="middle" font-size="10.5" class="muted">Ranch · Montana</text>
+    </g>
+  <g class="warn"><circle cx="712" cy="348" r="6" fill="#ffb02e"/><text x="700" y="392" text-anchor="middle" font-size="11" font-weight="700" style="fill:#ffd88a">12% obstructed</text></g>
+
+  <!-- chat -->
+  <rect x="30" y="118" width="440" height="276" rx="16" fill="#161d2b" stroke="#2c3750"/>
+  <g class="ask"><rect x="96" y="134" width="358" height="34" rx="12" fill="#2a3550"/><text x="110" y="156" font-size="14">Which terminals had obstructions today?</text></g>
+  <g class="c1"><rect x="46" y="184" width="240" height="26" rx="8" fill="#1d2536" stroke="#3ec7ff"/><text x="58" y="202" font-size="12.5" class="mono" style="fill:#a8e4ff">get_account_overview</text></g>
+  <g class="c2"><rect x="46" y="216" width="240" height="26" rx="8" fill="#1d2536" stroke="#3ec7ff"/><text x="58" y="234" font-size="12.5" class="mono" style="fill:#a8e4ff">get_terminal_telemetry <tspan class="muted">×4</tspan></text></g>
+  <g class="ans"><rect x="46" y="260" width="408" height="116" rx="12" fill="#1d2536"/>
+    <text x="60" y="286" font-size="14">Just one: <tspan font-weight="700">Rig-04</tspan> is <tspan font-weight="700" style="fill:#ffb02e">12% obstructed</tspan>,</text>
+    <text x="60" y="308" font-size="14">likely the new crane on the north deck.</text>
+    <text x="60" y="334" font-size="12.5" class="muted">The other 3 terminals are online with clear sky.</text>
+    <text x="60" y="354" font-size="12.5" class="muted">Want its 7-day history with get_terminal_history?</text></g>
+</svg>
